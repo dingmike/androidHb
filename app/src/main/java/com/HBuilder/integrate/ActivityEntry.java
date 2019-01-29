@@ -25,7 +25,6 @@ public class ActivityEntry extends ListActivity {
 		System.out.println("myListVIew----------------------------------------------------------------------");
 		System.out.println(new MyListViewAdapter());
 	}
-	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// TODO Auto-generated method stub
