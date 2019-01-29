@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>错误</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<style type="text/css">
+			.error-box {
+				text-align: center;
+				margin-top: 150px;
+				font-size: 16px;
+			}
+			
+			.error-box div{
+				margin-bottom: 5%;
+			}
+			
+			
+			a {
+				color: #E4393C;
+			}
+		</style>
+		<script type="text/javascript" charset="utf-8">
+		var href;
+		var count = 0;
+		document.addEventListener("error",function(e){
+		    href = e.href; // 错误页面的完整路径（包括完整的协议头）
+		},false);
+		
+		var retry = function() {
+			window.location.href = href;
+		}
+		var webView;
+		document.addEventListener('plusready',function(){
+			webView = plus.android.importClass("android.webkit.WebView");
+			plus.navigator.closeSplashscreen();
+		},false);
+
+		var openDebug = function() {
+			count++;
+			if (count < 20) {
+				return;
+			}
+		 	
+			webView.setWebContentsDebuggingEnabled(true);
+		}
+
+		
+		
+		
+		</script>
+	</head>
+
+
+	<body>
+		<div class="error-box">
+			<div onclick="openDebug()">网络君走丢了……</div>
+			<div style="margin-top:50px"></div>
+			<a onclick="retry();" >点击重试</a>
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" charset="utf-8">
+
+        // H5 plus事件处理
+        var as = 'pop-in';// 默认窗口动画
+        function plusReady() {
+            // Android处理返回键
+            // plus.key.addEventListener('backbutton',function(){
+            //	if(confirm('确认退出？')){
+            //		plus.runtime.quit();
+            //	}
+            //},false);
+            compatibleAdjust();
+        }
+
+        if (window.plus) {
+            plusReady();
+        } else {
+            document.addEventListener('plusready', plusReady, false);
+        }
+        // DOMContentLoaded事件处理
+        var _domReady = false;
+        document.addEventListener('DOMContentLoaded', function () {
+            _domReady = true;
+            compatibleAdjust();
+        }, false);
+        // 兼容性样式调整
+        var _adjust = false;
+
+        function compatibleAdjust() {
+            if (_adjust || !window.plus || !_domReady) {
+                return;
+            }
+            _adjust = true;
+            // iOS平台特效
+            if ('iOS' == plus.os.name) {
+                document.getElementById('content').className = 'scontent';	// 使用div的滚动条
+                if (navigator.userAgent.indexOf('StreamApp') >= 0) {	// 在流应用模式下显示返回按钮
+                    document.getElementById('back').style.visibility = 'visible';
+                }
+            }
+            // 预创建二级窗口
+//	preateWebviews();
+            // 关闭启动界面
+            plus.navigator.setStatusBarBackground('#D74B28');
+            if (plus.navigator.isImmersedStatusbar()) {
+                plus.navigator.setStatusBarStyle('UIStatusBarStyleBlackOpaque');
+            }
+            setTimeout(function () {
+
+                var getTimestamp = new Date().getTime();
+                var url = "http://192.168.10.71:8087/index.html";   //http://192.168.10.61:8087/index.html
+                //var url = "http://www.baidu.com";   //http://192.168.10.61:8087/index.html
+                window.location.href = url + "?timestamp=" + getTimestamp
+            }, 200);
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

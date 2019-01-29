@@ -1,0 +1,97 @@
+<html>
+	<head><style>
+		body{text-align:center}
+	</style>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<meta name="HandheldFriendly" content="true"/>
+		<meta name="MobileOptimized" content="320"/>
+		<script type="text/javascript" src="../js/common.js"></script>
+		<script type="text/javascript" src="../js/plug.js"></script>
+		<title>通联智管家</title>
+	<script language="javascript">
+
+		document.addEventListener('plusready',function(){
+
+		plus.key.addEventListener('backbutton',function(){
+				plus.runtime.quit();
+		},false);
+		},false);
+
+		function post(objform) {
+			
+			if(objform.PRINT_APPEND_TEXT.value == ""){
+				alert("请输入打印内容")
+				return;
+			}
+
+			var dataArray = [
+							 objform.PRINT_APPEND_BOLD.value,
+							 objform.PRINT_APPEND_SIZE.value,
+							 objform.PRINT_VERSION.value,
+							 objform.PRINT_APPEND_PAGE.value,
+							 objform.PRINT_APPEND_LOCATE.value,
+							 objform.PRINT_APPEND_TEXT.value
+							]
+
+			plus.plugintest.printTicket(
+	            dataArray,
+		        function( result ) {
+		           alert(result);
+		        },
+		        function(error){
+		           alert(error)
+		        }
+           );
+
+		}
+		
+		function getTerID(objform) {
+			
+			var id = plus.plugintest.getDeviceInfo();
+           
+             alert(id)
+
+		}
+	</script>
+</head>
+
+<body>
+	<h1>通联智管家 自定义打印</h1>
+	<form>
+		是否粗体:<select name="PRINT_APPEND_BOLD">
+		    <option value ="0">否</option>
+			<option value ="1">是</option>
+		</select><br/>
+		字体大小:<select name="PRINT_APPEND_SIZE">
+		    <option value ="16">小字体</option>
+			<option value ="24">中字体</option>
+			<option value ="32">大字体</option>
+		</select><br/>
+		USDK版本<select name="PRINT_VERSION">
+		    <option value ="0">USDK 2.4.8前 （默认）</option>
+			<option value ="1">USDK 2.4.8及后</option>
+		</select><br/>
+		打印的联数：<select name="PRINT_APPEND_PAGE">
+		    <option value ="1">1</option>
+			<option value ="2">2</option>
+			<option value ="3">3</option>
+		</select><br/>
+		对齐方式：<select name="PRINT_APPEND_LOCATE">
+		    <option value ="0">左对齐   默认</option>
+			<option value ="1">行中开始-左对齐</option>
+			<option value ="2">右对齐</option>
+			<option value ="3">行居中</option>
+			<option value ="4">左对齐居中</option>
+			<option value ="5">右对齐居中</option>
+		</select><br/>
+
+		打印内容:
+		<br/><textarea name="PRINT_APPEND_TEXT" cols="50" rows="20"></textarea>
+		<br/>
+		<input type="button" name="btn_trans" value="开始打印" onclick="post(this.form)">
+		<input type="button" name="btn_trans" value="获取终端号" onclick="getTerID(this.form)">
+	</form>
+
+</body>
+</html>
