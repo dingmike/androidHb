@@ -51,7 +51,7 @@ public class ActivityEntry extends ListActivity {
 			this.cls = cls;
 		}
 	}
-	
+
 	private static int randomColor(){
 		int count = 8;
 		int ret = 0;
