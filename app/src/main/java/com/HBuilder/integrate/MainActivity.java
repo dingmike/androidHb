@@ -305,7 +305,6 @@ import java.io.OutputStream;
 
 @SuppressLint("ShowToast")
 public class MainActivity extends Activity{
-
 	private MOneSupportService stuService = null;
 	private PrintInterface printService = null;
 	private RFReceiver rfReceiver ;
@@ -320,7 +319,10 @@ public class MainActivity extends Activity{
 
 //	private Button[] bt;
 
-
+	@Override
+	protected void onResume(Bundle savedInstanceState){
+		System.out.println("wo  resume le ya hahaha!!!!!!!!!");
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -330,7 +332,7 @@ public class MainActivity extends Activity{
 //		etBack = (EditText) findViewById(R.id.transData);//返回数据
 		//进入就初始化数据
 //		bt = new Button[idR.length];
-//		for(int i=0;i<idR.length;i++){
+//		for(int i=0;i<idR.length;i++){O
 //			bt[i] = (Button) findViewById(idR[i]);
 //			bt[i].setOnClickListener(this);
 //		}
@@ -833,7 +835,7 @@ public class MainActivity extends Activity{
 				GlobalData.dataString = jsO.toString();
 
 				Intent intent32=new Intent();
-//            intent32.setClass(this.getDPluginContext(), DemoActivity.class);
+//              intent32.setClass(this.getDPluginContext(), DemoActivity.class);
 				intent32.setClass(this.getApplicationContext(),  GlobalData.globalActivity.getClass());
 				this.startActivity(intent32);
 				finish();

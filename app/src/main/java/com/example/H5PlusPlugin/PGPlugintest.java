@@ -114,6 +114,7 @@ public class PGPlugintest extends StandardFeature
 
 package com.example.H5PlusPlugin;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -130,6 +131,7 @@ import android.os.RemoteException;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Choreographer;
+import android.widget.Toast;
 
 import com.HBuilder.integrate.DemoActivity;
 import com.HBuilder.integrate.MainActivity;
@@ -196,6 +198,7 @@ public class PGPlugintest extends StandardFeature{
 
     @Override
     public void onResume(){
+        Toast.makeText(this.getDPluginContext(), "onStart", Toast.LENGTH_LONG).show(); //测试
         System.out.println("resume------------------------");
         System.out.println(GlobalData.dataString);
 //        GlobalData.CallBackID = array.optString(0);
@@ -320,11 +323,6 @@ public class PGPlugintest extends StandardFeature{
         }
     }
 
-
-
-
-
-
 //	old
 
     public void printTicket(IWebview pWebview, JSONArray array) {
@@ -337,58 +335,24 @@ public class PGPlugintest extends StandardFeature{
         invokeGetTerminal(0, array);// array 为参数
 //        JSUtil.execCallback(pWebview, array.optString(0), "1", JSUtil.OK, false);
     }
+    public void getDeviceInfo(IWebview pWebview, JSONArray array) {
+        // 原生代码中获取JS层传递的参数，
+        // 参数的获取顺序与JS层传递的顺序一致
+        GlobalData.CallBackID = array.optString(0);
+        GlobalData.pWebview = pWebview;
+        System.out.println(this.getDPluginContext());
+        invokeFuPrintTicket(0, array);// array 为参数
 
-
-    private void invokePrintTicket(int requsetCode, JSONArray array) {
-
-        try {
-
-            JSONArray data = new JSONArray(array.optString(1));
-
-            RequestData requestData = new RequestData();
-            requestData.putValue(BaseData.BUSINESS_ID, Busi_Data.BUSI_MANAGER_SERVICE_PRINT); // 业务类型
-            requestData.putValue(BaseData.PRINT_APPEND_PAGE, data.getString(3)); // 打印的联数
-
-            String version = data.getString(2);
-            requestData.putValue(BaseData.PRINT_VERSION, version); // 版本
-
-            if (version.equals("0")) {
-                requestData.putValue(BaseData.PRINT_APPEND_BOLD, data.getInt(0) == 1);
-                requestData.putValue(BaseData.PRINT_APPEND_SIZE, data.getInt(1));
-                requestData.putValue(BaseData.PRINT_APPEND_LOCATE, data.getInt(4));
-                requestData.putValue(BaseData.PRINT_APPEND_TEXT, data.getString(5));
-            } else {
-//				Bitmap bmp = BitmapFactory.decodeResource(GlobalData.globalActivity.getResources(), R.drawable.test);
-//				String icon = getBitmapBase64Sttring(bmp);
-
-                RequestData contentStyle = new RequestData();
-//				contentStyle.putValue(BaseData.PRINT_APPEND_PIC, icon);
-                contentStyle.putValue(BaseData.PRINT_APPEND_BOLD, data.getInt(0) == 1);
-                contentStyle.putValue(BaseData.PRINT_APPEND_SIZE, data.getInt(1));
-                contentStyle.putValue(BaseData.PRINT_APPEND_LOCATE, data.getInt(4));
-                contentStyle.putValue(BaseData.PRINT_APPEND_TEXT, data.getString(5));
-                List<RequestData> lists = new ArrayList<RequestData>();
-                lists.add(contentStyle);
-                requestData.putValue(BaseData.PRINT_APPEND_CONTENT,lists);
-            }
-
-            Intent intent = new Intent();
-            intent.setComponent(new ComponentName("com.allinpay.usdk", "com.allinpay.usdk.MainActivity"));
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(RequestData.KEY_ERTRAS, requestData);
-            intent.putExtras(bundle);
-
-            GlobalData.globalActivity.startActivityForResult(intent, requsetCode);
-
-        } catch (Exception e) {
-
-            // Toast.makeText(pContext, e.getMessage(), Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
     }
+    public void scanInfo(IWebview pWebview, JSONArray array) {
+        // 原生代码中获取JS层传递的参数，
+        // 参数的获取顺序与JS层传递的顺序一致
+        GlobalData.CallBackID = array.optString(0);
+        GlobalData.pWebview = pWebview;
+        System.out.println(this.getDPluginContext());
+        invokeFuScan(0, array);// array 为参数
 
-
-
+    }
     private void invokeFuPrintTicket(int requsetCode, JSONArray array) {
 
         try {
@@ -426,6 +390,23 @@ public class PGPlugintest extends StandardFeature{
     }
 
 
+    private void invokeFuScan(int requsetCode, JSONArray array) {
+
+        try {
+            System.out.println("js come array--------");
+            System.out.println(array);
+            Intent intent32=new Intent();
+//              intent32.setClass(this.getDPluginContext(), DemoActivity.class);
+            intent32.setClass(this.getDPluginContext(), MainActivity.class);
+            GlobalData.callMethodId = 1015;// 扫码
+            nowActivity.startActivity(intent32); // 启动
+
+
+        } catch (Exception e) {
+            // Toast.makeText(pContext, e.getMessage(), Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
 
     public void invokeGetTerminalParams(IWebview pWebview, JSONArray array) {
         // 原生代码中获取JS层传递的参数，
@@ -466,27 +447,7 @@ public class PGPlugintest extends StandardFeature{
         return icon;
     }
 
-    public void getDeviceInfo(IWebview pWebview, JSONArray array) {
-        // 原生代码中获取JS层传递的参数，
-        // 参数的获取顺序与JS层传递的顺序一致
-        GlobalData.CallBackID = array.optString(0);
-        GlobalData.pWebview = pWebview;
-        System.out.println(this.getDPluginContext());
-        invokeFuPrintTicket(0, array);// array 为参数
 
-    }
-
-    public void invokeDeviceInfo() {
-        RequestData requestData = new RequestData();
-        requestData.putValue(BaseData.BUSINESS_ID, Busi_Data.BUSI_MANAGER_SERVICE_GET_BASIC_INFO);
-        Intent intent = new Intent();
-        intent.setComponent(new ComponentName("com.allinpay.usdk", "com.allinpay.usdk.MainActivity"));
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(RequestData.KEY_ERTRAS, requestData);
-        intent.putExtras(bundle);
-        //Toast.makeText(pContext, "加载设备信息", Toast.LENGTH_SHORT).show();
-        GlobalData.globalActivity.startActivityForResult(intent, 9999);
-    }
     /**
      * 下面是从assets中将图片复制到SD卡目录的参考方法 图片是黑白单色图
      */
