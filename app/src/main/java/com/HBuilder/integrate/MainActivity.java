@@ -319,7 +319,7 @@ public class MainActivity extends Activity{
 
 //	private Button[] bt;
 
-	@Override
+//	@Override
 	protected void onResume(Bundle savedInstanceState){
 		System.out.println("wo  resume le ya hahaha!!!!!!!!!");
 	}
